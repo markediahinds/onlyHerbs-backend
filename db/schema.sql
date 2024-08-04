@@ -35,7 +35,7 @@ CREATE TABLE biosystems (
     averageRecoveryTime NUMERIC
 );
 
-DROP TABLE IF EXISTS nutrients;
+-- DROP TABLE IF EXISTS nutrients;
 
 -- CREATE TABLE nutrients (
 --     id SERIAL PRIMARY KEY,
@@ -52,5 +52,10 @@ DROP TABLE IF EXISTS nutrients;
 --     boilingPoint INT,
 --     is_antioxidant BOOLEAN,
 --     foodSources TEXT,
+--     didYouKnow TEXT, 
 --     herb_id
 -- );
+
+-- DROP TABLE IF EXISTS organs;
+
+-- DROP TABLE IF EXISTS toxins;
