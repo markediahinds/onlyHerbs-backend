@@ -1,12 +1,21 @@
 const db = require('../db/dbConfig')
 
 
-const getAllHerbs = async () => {
+// const getAllHerbs = async () => {
+//     try {
+//         const allHerbs = await db.any("SELECT * FROM herbs")        
+//         return allHerbs
+//     } catch (err) {
+//         console.error(`Error fetching all herbs`, err)
+//         return err
+//     }
+// }
+
+const getAllHerbs = async (biosystem_id) => {
     try {
-        const allHerbs = await db.any("SELECT * FROM herbs")        
+        const allHerbs = await db.any("SELECT * FROM herbs WHERE biosystem_id=$1", biosystem_id)        
         return allHerbs
     } catch (err) {
-        console.error(`Error fetching all herbs`, err)
         return err
     }
 }
@@ -22,8 +31,11 @@ const getSingleHerb = async (id) => {
 
 const deleteHerb = async (id) => {
     try {
-        const removeHerb = await db.one("DELETE FROM herbs WHERE id=$1 RETURNING *", id)
-        return removeHerb
+        const deletedHerb = await db.one(
+            "DELETE FROM herbs WHERE id=$1 RETURNING *", 
+            id
+        )
+        return deletedHerb
     } catch (err) {
         return err
     }
@@ -31,7 +43,8 @@ const deleteHerb = async (id) => {
 
 const createHerb = async (herb) => {
     try {
-        const newHerb = await db.one("INSERT INTO herbs (name, imageURL, partsUsed, family, genus, nutrients, activeCompounds, medicinalUses, precautions, potencyRating, chakra, element, biosystem) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
+        const newHerb = await db.one(
+            "INSERT INTO herbs (name, imageURL, partsUsed, family, genus, nutrients, activeCompounds, medicinalUses, precautions, potencyRating, chakra, element, biosystem) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
             [
               herb.name, 
               herb.imageURL, 
@@ -45,7 +58,7 @@ const createHerb = async (herb) => {
               herb.potencyRating, 
               herb.chakra,
               herb.element, 
-              herb.biosystem
+              herb.biosystem_id
             ]
         )
         return newHerb
@@ -54,9 +67,10 @@ const createHerb = async (herb) => {
     }
 }
 
-const updateHerb = async (id, herb) => {
+const updateHerb = async (herb) => {
     try {
-        const editHerb = await db.one("UPDATE herbs SET name=$1, imageURL=$2, partsUsed=$3, family=$4, genus=$5, nutrients=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, chakra=$11, element=$12, biosystem=$13 WHERE id=$14 RETURNING *",
+        const updatedHerb = await db.one(
+            "UPDATE herbs SET name=$1, imageURL=$2, partsUsed=$3, family=$4, genus=$5, nutrients=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, chakra=$11, element=$12, biosystem=$13 WHERE id=$14 RETURNING *",
             [
               herb.name, 
               herb.imageURL,
@@ -70,11 +84,11 @@ const updateHerb = async (id, herb) => {
               herb.potencyRating, 
               herb.chakra,
               herb.element,  
-              herb.biosystem, 
-              biosystem_id
+              herb.biosystem_id, 
+              herb.id
             ]
         )
-        return editHerb
+        return updatedHerb
     } catch (err) {
         return err
     }

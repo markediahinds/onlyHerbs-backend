@@ -2,7 +2,9 @@ const express = require('express')
 const biosystems = express.Router()
 const herbsController = require('./herbsController')
 const { getAllBioSystems, getSingleBioSystem, deleteBioSystem, createBioSystem, updateBioSystem } = require('../queries/biosystems')
+const { checkName, checkBoolean } = require('../validations/checkBiosystems')
 biosystems.use('/:biosystem_id/herbs', herbsController)
+
 
 biosystems.get('/', async (req, res) => {
     const allBioSystems = await getAllBioSystems()
@@ -12,7 +14,6 @@ biosystems.get('/', async (req, res) => {
         res.status(404).json({ error: `Oops! BioSystems Not Found` })
     }
 })
-
 
 biosystems.get('/:id', async (req, res) => {
     const { id } = req.params
@@ -34,7 +35,7 @@ biosystems.delete('/:id', async (req, res) => {``
     }
 })
 
-biosystems.post('/', async (req, res) => {
+biosystems.post('/', checkName, checkBoolean, async (req, res) => {
     const newBioSystem = await createBioSystem(req.body)
     if (newBioSystem) {
         res.status(200).json(newBioSystem)
@@ -43,7 +44,7 @@ biosystems.post('/', async (req, res) => {
     }
 })
 
-biosystems.put('/:id', async (req, res) => {
+biosystems.put('/:id', checkName, checkBoolean, async (req, res) => {
     const { id } = req.params
     const updatedBioSystem = await updateBioSystem(id, req.body)
     if (updatedBioSystem.id) {

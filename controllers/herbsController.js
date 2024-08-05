@@ -2,6 +2,7 @@ const express = require('express')
 const herbs = express.Router({ mergeParams: true })
 const { getSingleBioSystem } = require('../queries/biosystems')
 const { getAllHerbs, getSingleHerb, deleteHerb, createHerb, updateHerb } = require('../queries/herbs')
+const { checkName, validateURL } = require('../validations/checkHerbs')
 
 
 herbs.get('/', async (req, res) => {
@@ -39,7 +40,7 @@ herbs.delete('/:id', async (req, res) => {``
     }
 })
 
-herbs.post('/', async (req, res) => {
+herbs.post('/', checkName, validateURL, async (req, res) => {
     const { biosystem_id } = req.params
     const newHerb = await createHerb({ ...req.body, biosystem_id })
     if (newHerb) {
@@ -49,7 +50,7 @@ herbs.post('/', async (req, res) => {
     }
 })
 
-herbs.put('/:id', async (req, res) => {
+herbs.put('/:id', checkName, validateURL, async (req, res) => {
     const { id, biosystem_id } = req.params
     const updatedHerb = await updateHerb({ ...req.body, id, biosystem_id })
     if (updatedHerb.id) {

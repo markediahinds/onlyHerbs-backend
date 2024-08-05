@@ -21,8 +21,11 @@ const getSingleBioSystem = async (id) => {
 
 const deleteBioSystem = async (id) => {
     try {
-        const removeBioSystem = db.one("DELETE FROM biosystems WHERE id=$1 RETURNING *", id)
-        return removeBioSystem
+        const deletedBioSystem = db.one(
+            "DELETE FROM biosystems WHERE id=$1 RETURNING *", 
+            id
+        )
+        return deletedBioSystem
     } catch (err) {
         return err
     }
@@ -51,7 +54,7 @@ const createBioSystem = async (biosystem) => {
 
 const updateBioSystem = async (id, biosystem) => {
     try {
-        const editBioSystem = db.one("UPDATE biosystems SET name=$1, description=$2, functionality=$3, primaryOrgans=$4, associatedDiseases=$5, element=$6, chakra=$7, has_regenerative_capacity=$8, averageRecoveryTime=$9) WHERE id=$10 RETURNING *",
+        const updatedBioSystem = db.one("UPDATE biosystems SET name=$1, description=$2, functionality=$3, primaryOrgans=$4, associatedDiseases=$5, element=$6, chakra=$7, has_regenerative_capacity=$8, averageRecoveryTime=$9) WHERE id=$10 RETURNING *",
             [
               biosystem.name,
               biosystem.description,
@@ -65,7 +68,7 @@ const updateBioSystem = async (id, biosystem) => {
               id 
             ]
         )
-        return editBioSystem
+        return updatedBioSystem
     } catch (err) {
         return err
     }
@@ -79,7 +82,3 @@ module.exports = {
     createBioSystem, 
     updateBioSystem
 }
-
-// const getHerbsWithSystem = async (biosystem) => {
-    
-// }

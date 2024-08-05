@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const herbsController = require('./controllers/herbsController')
+const biosystemsController = require('./controllers/biosystemsController')
 
 
 app.use(cors())
@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
     res.send(`Welcome to the #1 Herbology Hub Worldwide`)
 })
 
-app.use('/herbs', herbsController)
+app.use('/biosystems', biosystemsController)
 
 app.get('*', (req, res) => {
     res.status(404).send(`Internal Server Error`)
