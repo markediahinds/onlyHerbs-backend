@@ -1,12 +1,9 @@
 const db = require('../db/dbConfig')
 
-console.log(db)
 
 const getAllHerbs = async () => {
     try {
-        const allHerbs = await db.any("SELECT * FROM herbs")
-        console.log(allHerbs)
-        
+        const allHerbs = await db.any("SELECT * FROM herbs")        
         return allHerbs
     } catch (err) {
         console.error(`Error fetching all herbs`, err)
@@ -34,19 +31,20 @@ const deleteHerb = async (id) => {
 
 const createHerb = async (herb) => {
     try {
-        const newHerb = await db.one("INSERT INTO herbs (name, imageURL, family, genus, nutrients, partsUsed, activeCompounds, medicinalUses, precautions, potencyRating, is_perennial, biosystem) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *",
+        const newHerb = await db.one("INSERT INTO herbs (name, imageURL, partsUsed, family, genus, nutrients, activeCompounds, medicinalUses, precautions, potencyRating, chakra, element, biosystem) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
             [
               herb.name, 
               herb.imageURL, 
+              herb.partsUsed,
               herb.family, 
               herb.genus, 
               herb.nutrients, 
-              herb.partsUsed, 
               herb.activeCompounds, 
               herb.medicinalUses, 
               herb.precautions, 
               herb.potencyRating, 
-              herb.is_perennial, 
+              herb.chakra,
+              herb.element, 
               herb.biosystem
             ]
         )
@@ -58,21 +56,22 @@ const createHerb = async (herb) => {
 
 const updateHerb = async (id, herb) => {
     try {
-        const editHerb = await db.one("UPDATE herbs SET name=$1, imageURL=$2, family=$3, genus=$4, nutrients=$5, partsUsed=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, is_perennial=$11, biosystem=$12 WHERE id=$13 RETURNING *",
+        const editHerb = await db.one("UPDATE herbs SET name=$1, imageURL=$2, partsUsed=$3, family=$4, genus=$5, nutrients=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, chakra=$11, element=$12, biosystem=$13 WHERE id=$14 RETURNING *",
             [
               herb.name, 
-              herb.imageURL, 
+              herb.imageURL,
+              herb.partsUsed, 
               herb.family, 
               herb.genus, 
-              herb.nutrients, 
-              herb.partsUsed, 
+              herb.nutrients,  
               herb.activeCompounds,
               herb.medicinalUses, 
               herb.precautions, 
               herb.potencyRating, 
-              herb.is_perennial, 
+              herb.chakra,
+              herb.element,  
               herb.biosystem, 
-              id
+              biosystem_id
             ]
         )
         return editHerb
