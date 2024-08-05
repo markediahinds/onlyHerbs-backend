@@ -1,18 +1,20 @@
 express = require('express')
 const herbs = express.Router()
-const { getAllHerbs, getSingleHerb, deleteHerb, createHerb,  updateHerb } = require('../queries/herbs')
+const { getAllHerbs, getSingleHerb, deleteHerb, createHerb, updateHerb } = require('../queries/herbs')
 
 herbs.get('/', async (req, res) => {
     const allHerbs = await getAllHerbs()
+    console.log(allHerbs)
     if (allHerbs[0]) {
         res.status(200).json(allHerbs)
     } else {
-        res.status(404).json({ error: `Oops! Page Not Found`})
+        res.status(404).json({ error: `Oops! Hub Not Found`})
     }
 })
 
 herbs.get('/:id', async (req, res) => {
-    const singleHerb = await getSingleHerb()
+    const { id } = req.params
+    const singleHerb = await getSingleHerb(id)
     if (singleHerb.id) {
         res.status(200).json(singleHerb)
     } else {
@@ -20,8 +22,9 @@ herbs.get('/:id', async (req, res) => {
     }
 })
 
-herbs.delete('/:id', async (req, res) => {
-    const deletedHerb = await deleteHerb()
+herbs.delete('/:id', async (req, res) => {``
+    const { id } = req.params
+    const deletedHerb = await deleteHerb(id)
     if (deletedHerb.id) {
         res.status(200).json({ message: `Successfully Removed Herb`})
     } else {
@@ -39,7 +42,8 @@ herbs.post('/', async (req, res) => {
 })
 
 herbs.put('/:id', async (req, res) => {
-    const updatedHerb = await updateHerb()
+    const { id } = req.params
+    const updatedHerb = await updateHerb(id, req.body)
     if (updatedHerb.id) {
         res.status(200).json(updatedHerb)
     } else {
