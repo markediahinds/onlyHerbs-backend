@@ -10,7 +10,7 @@ CREATE TABLE biosystems (
     functionality TEXT,
     primaryOrgans TEXT,
     associatedDiseases TEXT,
-    element VARCHAR(30),
+    element VARCHAR(10),
     chakra VARCHAR(20), 
     has_regenerative_capacity BOOLEAN,
     averageRecoveryTime NUMERIC
@@ -33,6 +33,29 @@ CREATE TABLE herbs (
     CHECK (potencyRating >= 0 AND potencyRating <= 10),
     chakra VARCHAR(20),
     element VARCHAR(10), 
+    biosystem VARCHAR(20),
+    addtlsystem VARCHAR(20),
+    biosystem_id INTEGER REFERENCES biosystems (id)
+);
+
+DROP TABLE IF EXISTS toxins;
+
+CREATE TABLE toxins (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    imageURL TEXT,
+    description TEXT, 
+    element VARCHAR(10), 
+    chakra VARCHAR(20), 
+    planet VARCHAR(10), 
+    commonSources TEXT, 
+    organs TEXT,
+    biosystem VARCHAR(20),
+    addtlsystem VARCHAR(20),
+    effectsOnAdults TEXT, 
+    effectsOnChildren TEXT,
+    detoxMethods TEXT, 
+    timeToLeaveBody TEXT,
     biosystem_id INTEGER REFERENCES biosystems (id)
 );
 
@@ -59,4 +82,4 @@ CREATE TABLE herbs (
 
 -- DROP TABLE IF EXISTS organs;
 
--- DROP TABLE IF EXISTS toxins;
+

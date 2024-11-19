@@ -20,9 +20,11 @@ const getAllHerbs = async (biosystem_id) => {
     }
 }
 
-const getSingleHerb = async (id) => {
+const getSingleHerb = async (id, biosystem_id) => {
     try {
-        const singleHerb = await db.one("SELECT * FROM herbs WHERE id=$1", id)
+        const singleHerb = await db.one("SELECT * FROM herbs WHERE id=$1 AND biosystem_id=$2", 
+            [id, biosystem_id]
+        ) // injecting two values into the query
         return singleHerb
     } catch (err) {
         return err
@@ -44,7 +46,7 @@ const deleteHerb = async (id) => {
 const createHerb = async (herb) => {
     try {
         const newHerb = await db.one(
-            "INSERT INTO herbs (name, imageURL, partsUsed, family, genus, nutrients, activeCompounds, medicinalUses, precautions, potencyRating, chakra, element, biosystem) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
+            "INSERT INTO herbs (name, imageURL, partsUsed, family, genus, nutrients, activeCompounds, medicinalUses, precautions, potencyRating, chakra, element, biosystem, addtlbiosystem, biosystem_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *",
             [
               herb.name, 
               herb.imageURL, 
@@ -57,7 +59,9 @@ const createHerb = async (herb) => {
               herb.precautions, 
               herb.potencyRating, 
               herb.chakra,
-              herb.element, 
+              herb.element,
+              herb.biosystem,
+              herb.addtlbiosystem,  
               herb.biosystem_id
             ]
         )
@@ -70,7 +74,7 @@ const createHerb = async (herb) => {
 const updateHerb = async (herb) => {
     try {
         const updatedHerb = await db.one(
-            "UPDATE herbs SET name=$1, imageURL=$2, partsUsed=$3, family=$4, genus=$5, nutrients=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, chakra=$11, element=$12, biosystem=$13 WHERE id=$14 RETURNING *",
+            "UPDATE herbs SET name=$1, imageURL=$2, partsUsed=$3, family=$4, genus=$5, nutrients=$6, activeCompounds=$7, medicinalUses=$8, precautions=$9, potencyRating=$10, chakra=$11, element=$12, biosystem=$13, addtlbiosystem=$14, biosystem_id=$15 WHERE id=$14 RETURNING *",
             [
               herb.name, 
               herb.imageURL,
@@ -83,7 +87,9 @@ const updateHerb = async (herb) => {
               herb.precautions, 
               herb.potencyRating, 
               herb.chakra,
-              herb.element,  
+              herb.element,
+              herb.biosystem,
+              herb.addtlbiosystem,   
               herb.biosystem_id, 
               herb.id
             ]
