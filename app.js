@@ -8,7 +8,7 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.send(`Welcome to the #1 Herbology Hub Worldwide`)
+    res.send(`Welcome to the #1 Celf-Care Hub Worldwide`)
 })
 
 app.use('/biosystems', biosystemsController)
